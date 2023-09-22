@@ -2,13 +2,9 @@
 import Link from "next/link";
 import ParticleScene from "@/utils/ParticleSystemBackground";
 import React from "react";
-import {UseAppDispatch, UseAppSelector} from "@/redux/hooks";
-import {decrement, increment, reset} from "@/redux/slices/counterSlices";
 
 
 export default function Home() {
-  const count = UseAppSelector((state) => state.counterReducer.value);
-  const dispatch = UseAppDispatch();
 
   return (<>
     <header>
@@ -35,17 +31,6 @@ export default function Home() {
               </div>
             </li>
           </ul>
-
-          <h4 style={{ marginBottom: 16 }}>{count}</h4>
-          <button onClick={() => dispatch(increment())}>increment</button>
-          <button
-              onClick={() => dispatch(decrement())}
-              style={{ marginInline: 16 }}
-          >
-            decrement
-          </button>
-          <button onClick={() => dispatch(reset())}>reset</button>
-
         </main>
       </div>
     </div>
