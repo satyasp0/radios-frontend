@@ -1,5 +1,5 @@
 import React from 'react';
-import ParticleScene from '../../utils/threeTrial';
+import ParticleScene from '../../utils/ParticleSystemBackground';
 
 const Radio = () => {
     return (

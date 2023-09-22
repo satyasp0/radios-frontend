@@ -1,0 +1,1 @@
+export const radioDefaultEndpoint = process.env.NEXT_PUBLIC_RADIO_DEFAULT_ENDPOINT

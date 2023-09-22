@@ -24,7 +24,7 @@ const ParticleScene: React.FC = () => {
         // Create a particle system
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.004,
+            size: 0.007,
             vertexColors: true,
         });
 
@@ -62,8 +62,8 @@ const ParticleScene: React.FC = () => {
             requestAnimationFrame(animate);
 
             // Rotate the particle system (optional)
-            particles.rotation.x += 0.002;
-            particles.rotation.y += 0.007;
+            particles.rotation.x += 0.001;
+            particles.rotation.y += 0.001;
 
             // Render the scene
             renderer.render(scene, camera);

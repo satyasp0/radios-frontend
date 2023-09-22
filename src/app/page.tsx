@@ -1,9 +1,11 @@
 "use client"
 import Link from "next/link";
-import ParticleScene from "@/utils/threeTrial";
+import ParticleScene from "@/utils/ParticleSystemBackground";
 import React from "react";
 
+
 export default function Home() {
+
   return (<>
     <header>
       <title>Agus Setiawan Popalia</title>

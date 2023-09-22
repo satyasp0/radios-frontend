@@ -1,9 +1,11 @@
 "use client"
-import ParticleScene from "@/utils/threeTrial";
+import ParticleScene from "@/utils/ParticleSystemBackground";
 import React, { useEffect, useState } from "react";
+import Player from "./UseRadioPlayer";
 
 export default function Radio() {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -13,24 +15,33 @@ export default function Radio() {
     }, []);
 
     const headerStyle = {
-        opacity: isVisible ? 1 : 0, // Set opacity based on isVisible state
-        transition: "opacity 1s ease", // Apply a transition to opacity property
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 1s ease",
     };
 
     return (
         <div className="radio-container">
             <ParticleScene />
+            <audio src={"https://radio.garden/api/ara/content/listen/2ayT4sGf/channel.mp3"}></audio>
             <div className="content">
-                <main className="h-screen justify-center items-center text-amber-100 font-semibold">
-                    {/* Apply the style to the header */}
-                    <header style={headerStyle}>
-                        <h1 className="flex justify-center p-5 text-2xl h-1/6">
+                <main className="min-h-screen flex flex-col justify-between items-center text-amber-200 font-semibold">
+                    <header style={headerStyle} className="h-1/6 w-full">
+                        <h1 className="flex justify-center p-5 font-bold text-3xl">
                             Radio Roll
                         </h1>
                     </header>
-                    <div className="m-auto items-center flex gap-52 justify-center h-5/6"></div>
+
+
+                    <div className="h-1/6">
+                        {/* Player Component */}
+                        <div className="md:fixed sm:w-full md:w-2/5 lg:w-1/5 p-2 bottom-3 md:left-0">
+                            <Player />
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
+
+
     );
 }
