@@ -5,13 +5,12 @@ import {setIsAllPlaceChannels, setRadioIsPlaying} from "@/redux/slices/statesSli
 import {fetchNowPlaying} from "@/redux/actions/nowPlayingActions";
 import {fetchPlaceChannels} from "@/redux/actions/allPlaceChannelsAction";
 import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
-import {useRef} from "react";
 
-export default function RadioPlaceList({contents}: {
+export default function RadioPlaceList({contents, scrollRef}: {
     contents: RadioContentDto[] | undefined;
+    scrollRef:HTMLDivElement | null;
     }) {
     const dispatch = UseAppDispatch();
-    const scrollerRef = useRef<HTMLDivElement>(null);
 
     const {
         isAllPlaceChannels
@@ -38,16 +37,20 @@ export default function RadioPlaceList({contents}: {
             dispatch(setIsAllPlaceChannels(true))
         }else if (id.startsWith("/visit")){
             dispatch(fetchPlaceDetail(getRealID(id,1)))
-            scrollerRef?.current?.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+            scrollToTop()
         }else {
             dispatch(setRadioIsPlaying(false));
             dispatch(fetchNowPlaying(id));
             dispatch(fetchPlaceDetail("1lHyt385"))
         }
     };
+
+    const scrollToTop= () => {
+        scrollRef?.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
 
     const getRealID = (urls:string, part:number) => {
         const parts = urls.split('/');

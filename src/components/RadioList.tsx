@@ -47,7 +47,7 @@ export default function RadioList(){
                        border-b rounded-xl w-full p-4 pb-8 sm:p-6 sm:pb-8 lg:px-4 xl:px-6 lg:pt-5 xl:pb-10`}
              ref={scrollerRef}>
 
-            {isAllPlaceChannels ? <RadioPlaceList contents={PlaceChannelsContent}/> : <RadioPlaceList contents={placeDetailContent}/>}
+            {isAllPlaceChannels ? <RadioPlaceList contents={PlaceChannelsContent} scrollRef={scrollerRef.current}/> : <RadioPlaceList contents={placeDetailContent} scrollRef={scrollerRef.current}/>}
         </div>
         <button
             onClick={handleHider}
