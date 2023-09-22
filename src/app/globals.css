@@ -67,5 +67,52 @@ canvas {
   animation: floatAndWiggle 0.5s ease infinite; /* Adjust duration and timing as needed */
 }
 
+/* YourComponent.css */
+.element {
+  max-height: 1px;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out; /* Adjust the duration and timing function as needed */
+}
 
+.element.visible {
+  overflow-y: scroll;
+  max-height: 80vw;
+}
+
+@media (min-height: 800px) {
+  .element.visible {
+    max-height: 110vw; /* Adjust to your desired value for larger screens */
+  }
+}
+
+@media (min-width: 768px) {
+  .element.visible {
+    max-height: 55vw; /* Adjust to your desired value for larger screens */
+  }
+}
+
+/* Media query for screens larger than or equal to 1024px */
+@media (min-width: 1024px) {
+  .element.visible {
+    max-height: 32vw; /* Adjust to your desired value for even larger screens */
+  }
+}
+
+.element.visible::-webkit-scrollbar {
+  width: 0.5rem; /* Adjust the width as needed */
+  display: none; /* Hide scrollbar */
+}
+
+.spin-it {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
