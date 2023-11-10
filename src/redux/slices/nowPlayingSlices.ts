@@ -6,6 +6,7 @@ import {NowPlayingDto} from "@/sources/dto/NowPlayingDto";
 const initialState: NowPlayingDto = {
     isError: false,
     isLoading: false,
+    isGetComplete:false,
     type: "Channel",
     title: "DArdan FM 105.9",
     id: "_PBsjNLL",
@@ -51,6 +52,7 @@ export const nowPlayingSlice = createSlice({
                 state.place.title = action.payload.data?.place?.title
                 state.country.id = action.payload.data?.country?.id
                 state.country.title = action.payload.data?.country?.title
+                state.isGetComplete = true;
             })
             .addCase(fetchNowPlaying.rejected, (state) => {
                 state.isLoading = false;

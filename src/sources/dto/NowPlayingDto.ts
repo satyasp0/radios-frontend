@@ -3,6 +3,7 @@ import {RegionDto} from "@/sources/dto/RegionDto";
 export class NowPlayingDto  {
     isError?: boolean;
     isLoading?: boolean;
+    isGetComplete?:boolean;
     type?: string;
     title!: string;
     id!: string;

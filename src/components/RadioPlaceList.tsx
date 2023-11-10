@@ -1,10 +1,18 @@
 import {RadioContentDto} from "@/sources/dto/RadioContentDto";
 import RadioListAccessory from "@/components/RadioListAccessory";
 import {UseAppDispatch, UseAppSelector} from "@/redux/hooks";
-import {setIsAllPlaceChannels, setRadioIsPlaying} from "@/redux/slices/statesSlices";
+import {
+    setIsAllPlaceChannels,
+    setNextPlayingId,
+    setNowPlayingId,
+    setPreviousPlayingId,
+    setRadioIsPlaying
+} from "@/redux/slices/statesSlices";
 import {fetchNowPlaying} from "@/redux/actions/nowPlayingActions";
 import {fetchPlaceChannels} from "@/redux/actions/allPlaceChannelsAction";
 import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
+import {useEffect} from "react";
+import {getRealID} from "@/utils/getRealId";
 
 export default function RadioPlaceList({contents, scrollRef}: {
     contents: RadioContentDto[] | undefined;
@@ -13,7 +21,8 @@ export default function RadioPlaceList({contents, scrollRef}: {
     const dispatch = UseAppDispatch();
 
     const {
-        isAllPlaceChannels
+        isAllPlaceChannels,
+        nowPlayingId,
     } = UseAppSelector((state) => state.states)
 
     const {
@@ -27,14 +36,17 @@ export default function RadioPlaceList({contents, scrollRef}: {
     } = UseAppSelector(state => state.allPlaceChannelsSlice)
 
     const handleLiClick = (id : string) => {
+        dispatch(setNowPlayingId(id));
         if(id==radioUrl){
             return;
         }else if(id.startsWith("/listen")){
             dispatch(setRadioIsPlaying(false));
             dispatch(fetchNowPlaying(getRealID(id,1)));
+            findNextAndPrevId()
         }else if (id.startsWith("/visit") && id.endsWith("channels")){
             dispatch(fetchPlaceChannels(getRealID(id,2)))
             dispatch(setIsAllPlaceChannels(true))
+            findNextAndPrevId()
         }else if (id.startsWith("/visit")){
             dispatch(fetchPlaceDetail(getRealID(id,1)))
             scrollToTop()
@@ -45,6 +57,49 @@ export default function RadioPlaceList({contents, scrollRef}: {
         }
     };
 
+    useEffect(() => {
+        findNextAndPrevId()
+    }, [nowPlayingId]);
+
+    const findNextAndPrevId = () => {
+        if (!nowPlayingId || !scrollRef || !scrollRef.children) {
+            return null;
+        }
+        const divElement = Array.from(scrollRef.children).filter(
+            (child) => child.tagName.toLowerCase() === 'div'
+        );
+        const ulElements = divElement
+            .map((divElement) => Array.from(divElement.children))
+            .flat()
+            .filter((child) => child.tagName.toLowerCase() === 'ul');
+
+        finderLoop(ulElements)
+    };
+
+    const finderLoop = (ulElements: Element[]) => {
+        for (const element of ulElements) {
+            const liElements = element.querySelectorAll('li');
+
+            for (let j = 0; j < liElements.length; j++) {
+                const liElement = liElements[j];
+                const dataId = liElement.getAttribute('data-id');
+
+                if (dataId === nowPlayingId) {
+                    const nextIndex = j + 1;
+                    const prevIndex = j - 1;
+
+                    if (nextIndex < liElements.length) {
+                        dispatch(setNextPlayingId(liElements[nextIndex].getAttribute('data-id')));
+                    }
+
+                    if (prevIndex >= 0) {
+                        dispatch(setPreviousPlayingId(liElements[prevIndex].getAttribute('data-id')));
+                    }
+                }
+            }
+        }
+    }
+
     const scrollToTop= () => {
         scrollRef?.scrollTo({
             top: 0,
@@ -52,16 +107,9 @@ export default function RadioPlaceList({contents, scrollRef}: {
         });
     }
 
-    const getRealID = (urls:string, part:number) => {
-        const parts = urls.split('/');
-        return parts[parts.length - part];
-    }
-
     const PlaceHeader = `${placeTitle}, ${placeSubtitle}`;
     return(<>
-
-
-            {contents?.map((contents) => (<>
+        {!isAllPlaceChannels && contents?.map((contents) => (<>
                 <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-gray-900 dark:text-white">
                      {isAllPlaceChannels?  PlaceHeader : contents.title}
                 </div>
@@ -70,6 +118,7 @@ export default function RadioPlaceList({contents, scrollRef}: {
                     {contents?.items?.map((items) => (<>
                         <li className={`${items.title === radioName ? "text-blue-600 dark:bg-gray-600 bg-gray-100/50 dark:text-blue-400 hover:dark:text-blue-300 cursor-not-allowed"  : ""} flex rounded-2xl justify-between hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white items-center content-center`}
                             key={items.title}
+                            data-id={items.href}
                             onClick={() => handleLiClick((items?.href ?? items.page?.url) ?? "")}>
                             <a className="block px-4 py-2">
                                 {items.title}
@@ -81,8 +130,30 @@ export default function RadioPlaceList({contents, scrollRef}: {
                         </li>
                     </>))}
                 </ul>
-
             </>))
-            }
+        }
+
+        {isAllPlaceChannels && contents?.map((contents) => (<>
+            <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-gray-900 dark:text-white">
+                {isAllPlaceChannels?  PlaceHeader : contents.title}
+            </div>
+
+            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg cursor-pointer">
+                {contents?.items?.map((items) => (<>
+                    <li className={`${items.page?.title === radioName ? "text-blue-600 dark:bg-gray-600 bg-gray-100/50 dark:text-blue-400 hover:dark:text-blue-300 cursor-not-allowed"  : ""} flex rounded-2xl justify-between hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white items-center content-center`}
+                        key={items.page?.title}
+                        data-id={items.page?.url}
+                        onClick={() => handleLiClick((items?.page?.url  ?? items.page?.url) ?? "")}>
+                        <a className="block px-4 py-2">
+                            {items.page?.title}
+                            {contents?.title?.toLowerCase().startsWith("popular") || contents?.title?.toLowerCase().startsWith("picks from") ?
+                                <p className={"text-gray-500 text-xs"}>{items.page?.subtitle}</p> : ""
+                            }
+                        </a>
+                        <RadioListAccessory contents={contents} items={items} />
+                    </li>
+                </>))}
+            </ul>
+        </>))}
     </>)
 }

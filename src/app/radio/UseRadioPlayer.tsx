@@ -1,15 +1,22 @@
 "use client"
 import {PrevIcon, NextIcon, StopIcon, PlayIcon, LoadingIcon} from "@/sources/icons"
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {UseAppDispatch, UseAppSelector} from "@/redux/hooks";
 import {setRadioIsLoading} from "@/redux/slices/nowPlayingSlices";
-import {setRadioIsPlaying} from "@/redux/slices/statesSlices";
+import {setNowPlayingId, setRadioIsPlaying} from "@/redux/slices/statesSlices";
 import RadioList from "@/components/RadioList";
+import {fetchNowPlaying} from "@/redux/actions/nowPlayingActions";
+import {getRealID} from "@/utils/getRealId";
+import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
 
 export default function useRadioPlayer(){
 
     const dispatch = UseAppDispatch();
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const {
+        nextPlayingId,
+        previousPlayingId,
+    } = UseAppSelector((state) => state.states)
 
     const {
         place: { title: radioRegion },
@@ -17,7 +24,7 @@ export default function useRadioPlayer(){
         title: radioName,
         id: radioID,
         isLoading:radioIsLoading,
-
+        isGetComplete,
     } = UseAppSelector((state) => state.nowPlaying);
 
     const {
@@ -38,10 +45,22 @@ export default function useRadioPlayer(){
         iconToDisplay = radioIsPlaying ? <StopIcon /> : <PlayIcon />;
     }
 
+    const handleNexClick = (id:string) =>{
+        dispatch(setRadioIsPlaying(false));
+        dispatch(fetchNowPlaying(getRealID(id,1)));
+        dispatch(setNowPlayingId(id));
+    }
 
+    useEffect(() => {
+        dispatch(fetchNowPlaying("_PBsjNLL"));
+        dispatch(fetchPlaceDetail("1lHyt385"))
+        dispatch(setRadioIsLoading(false))
+        dispatch(setRadioIsPlaying(false))
+    }, [dispatch]);
 
     return (
 
+        (isGetComplete &&
             <div className="z-10 w-full rounded-xl shadow-xl">
                 <audio
                     ref={audioRef}
@@ -73,7 +92,7 @@ export default function useRadioPlayer(){
                 </div>
                 <div
                     className="bg-slate-50/80 text-slate-500 transition-all duration-500 dark:bg-slate-600/70 dark:text-slate-200/50 rounded-b-xl flex items-center">
-                    <div className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
+                    <div onClick={() => previousPlayingId && handleNexClick(previousPlayingId)} className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
                         <button type="button" aria-label="Previous">
                           <PrevIcon/>
                         </button>
@@ -91,12 +110,13 @@ export default function useRadioPlayer(){
 
                     </button>
 
-                    <div className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
+                    <div onClick={() => nextPlayingId && handleNexClick(nextPlayingId)} className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
                         <button type="button" aria-label="Next">
                             <NextIcon/>
                         </button>
                     </div>
                 </div>
             </div>
+        )
     )
 }
