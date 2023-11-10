@@ -94,7 +94,7 @@ canvas {
 /* Media query for screens larger than or equal to 1024px */
 @media (min-width: 1024px) {
   .element.visible {
-    max-height: 32vw; /* Adjust to your desired value for even larger screens */
+    max-height: 31vw; /* Adjust to your desired value for even larger screens */
   }
 }
 
@@ -114,5 +114,21 @@ canvas {
   to {
     transform: rotate(360deg);
   }
+}
+
+.floating-element {
+  position: absolute;
+  top: 23px;
+  left: 20px;
+}
+
+.active-left {
+  filter: blur(0px);
+}
+.active-middle {
+  filter: blur(1px);
+}
+.active-right {
+  filter: blur(0px);
 }
 

@@ -5,6 +5,9 @@ type statesState = {
     isDarkMode?:boolean;
     isHidden?:boolean;
     isAllPlaceChannels?:boolean;
+    nowPlayingId?:string;
+    nextPlayingId?:string;
+    previousPlayingId?:string;
 }
 
 const initialState:statesState = {
@@ -12,6 +15,9 @@ const initialState:statesState = {
     isDarkMode:false,
     isHidden:true,
     isAllPlaceChannels:false,
+    nowPlayingId:"",
+    nextPlayingId:"",
+    previousPlayingId:""
 } as statesState
 
 export const states = createSlice({
@@ -29,6 +35,15 @@ export const states = createSlice({
         },
         setIsAllPlaceChannels:(state, action) => {
             state.isAllPlaceChannels = action.payload
+        },
+        setNowPlayingId:(state,action) => {
+            state.nowPlayingId = action.payload;
+        },
+        setNextPlayingId:(state, action)=>{
+            state.nextPlayingId = action.payload;
+        },
+        setPreviousPlayingId:(state, action) => {
+            state.previousPlayingId = action.payload;
         }
     }
 });
@@ -38,6 +53,9 @@ export const {
     setIsDarkMode,
     setIsHidden,
     setIsAllPlaceChannels,
+    setNowPlayingId,
+    setPreviousPlayingId,
+    setNextPlayingId,
 } = states.actions;
 
 export default states.reducer
