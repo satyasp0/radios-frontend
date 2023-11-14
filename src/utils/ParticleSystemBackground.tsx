@@ -8,13 +8,40 @@ const ParticleScene: React.FC = () => {
     useEffect(() => {
         if (!containerRef.current) return;
 
-        // Create a scene
+        let useMouseInput = false;
+        let mouseMoveTimeout: NodeJS.Timeout | null = null;
+        let theta = 0;
+
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2( 0x000000, 0.1 );
 
+        let mouseX = 0;
+        let mouseY = 0;
+
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event: MouseEvent) => {
+            onDocumentMouseMove(event);
+        });
+
+        function onDocumentMouseMove(event: MouseEvent): void {
+            useMouseInput = true;
+            mouseX = (event.clientX - windowHalfX) / 100;
+            mouseY = (event.clientY - windowHalfY) / 100;
+
+            if (mouseMoveTimeout) {
+                clearTimeout(mouseMoveTimeout);
+            }
+
+            mouseMoveTimeout = setTimeout(() => {
+                useMouseInput = false;
+            }, 2000);
+        }
+
         // Create a camera
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        camera.position.z = 2;
 
         // Create a renderer
         const renderer = new THREE.WebGLRenderer();
@@ -24,9 +51,10 @@ const ParticleScene: React.FC = () => {
         // Create a particle system
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.007,
+            size: 0.017,
             vertexColors: true,
         });
+
 
         // Set up arrays to hold particle data
         const positions: number[] = [];
@@ -62,8 +90,25 @@ const ParticleScene: React.FC = () => {
             requestAnimationFrame(animate);
 
             // Rotate the particle system (optional)
-            particles.rotation.x += 0.001;
-            particles.rotation.y += 0.001;
+            theta += 0.01;
+
+            if (useMouseInput) {
+                // Rotate the particle system using mouse input
+                camera.position.x += (mouseX - camera.position.x) * 0.005;
+                camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            } else {
+                // Default animation when there is no mouse movement
+                const defaultTheta = theta + 0.01;
+                const radius = 5;
+
+                // Smoothly interpolate between current and default positions
+                const smoothingFactor = 0.001;
+                camera.position.x += (radius * Math.sin(THREE.MathUtils.degToRad(defaultTheta)) - camera.position.x) * smoothingFactor;
+                camera.position.y += (radius * Math.sin(THREE.MathUtils.degToRad(defaultTheta)) - camera.position.y) * smoothingFactor;
+                camera.position.z += (radius * Math.cos(THREE.MathUtils.degToRad(defaultTheta)) - camera.position.z) * smoothingFactor;
+            }
+
+            camera.lookAt(scene.position);
 
             // Render the scene
             renderer.render(scene, camera);
