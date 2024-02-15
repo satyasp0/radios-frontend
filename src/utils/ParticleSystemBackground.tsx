@@ -1,9 +1,25 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import * as THREE from 'three';
 
 const ParticleScene: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const getRandomPlanetColor = () => {
+        // Generate random values for RGB components
+        let r, g, b;
+
+        // Avoid pink tones
+        do {
+            r = Math.floor(Math.random() * 100) + 100;
+            g = Math.floor(Math.random() * 100) + 100;
+            b = Math.floor(Math.random() * 100) + 100;
+        } while (r > 220 && g < 100 && b > 220);
+
+        // Convert RGB to hexadecimal color
+        return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+    };
+
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -11,13 +27,8 @@ const ParticleScene: React.FC = () => {
         let useMouseInput = false;
         let mouseMoveTimeout: NodeJS.Timeout | null = null;
         let theta = 0;
-
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2( 0x000000, 0.1 );
-
         let mouseX = 0;
         let mouseY = 0;
-
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
 
@@ -39,53 +50,48 @@ const ParticleScene: React.FC = () => {
             }, 2000);
         }
 
-        // Create a camera
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 2;
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.001, 500);
+        camera.position.z = 5;
 
-        // Create a renderer
-        const renderer = new THREE.WebGLRenderer();
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2( 0x000000, 0.1 );
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         containerRef.current.appendChild(renderer.domElement);
 
-        // Create a particle system
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.017,
-            vertexColors: true,
-        });
 
+        const particlesCount = 3000
 
-        // Set up arrays to hold particle data
-        const positions: number[] = [];
-        const colors: number[] = [];
+        // Create 100 meshes and scatter them randomly
+        for (let i = 0; i < particlesCount; i++) {
 
-        const particleCount = 10000;
+            if(i%80==0){
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+                directionalLight.position.x = Math.random()
+                directionalLight.position.y = Math.random()
+                directionalLight.position.z = Math.random()
+                scene.add(directionalLight);
+            }
 
-        for (let i = 0; i < particleCount; i++) {
-            // Random positions
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
-            const z = (Math.random() - 0.5) * 10;
+            const material = new THREE.MeshStandardMaterial({ color: getRandomPlanetColor(), roughness:10});
+            material.roughness = 0.4
 
-            positions.push(x, y, z);
+            const geometry = new THREE.CapsuleGeometry(0.005 + Math.random() * 0.0000001, 0.0005, 5, 15);
+            const mesh = new THREE.Mesh(geometry, material);
 
-            const r = Math.random();
-            const g = Math.random();
-            const b = Math.random();
+            // Set random positions for each mesh
+            mesh.position.x = Math.random() * 10 - 5;
+            mesh.position.y = Math.random() * 10 - 5;
+            mesh.position.z = Math.random() * 10 - 5;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
 
-            colors.push(r, g, b);
+            scene.add(mesh);
         }
 
-        // Add positions and colors to the particle geometry
-        particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-        // Add the particle system to the scene
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particles);
-
-        // Animation function
         const animate = () => {
             requestAnimationFrame(animate);
 
@@ -99,7 +105,7 @@ const ParticleScene: React.FC = () => {
             } else {
                 // Default animation when there is no mouse movement
                 const defaultTheta = theta + 0.01;
-                const radius = 5;
+                const radius = 2;
 
                 // Smoothly interpolate between current and default positions
                 const smoothingFactor = 0.001;
@@ -110,13 +116,11 @@ const ParticleScene: React.FC = () => {
 
             camera.lookAt(scene.position);
 
-            // Render the scene
             renderer.render(scene, camera);
         };
 
         animate();
 
-        // Handle window resize
         const handleResize = () => {
             const newWidth = window.innerWidth;
             const newHeight = window.innerHeight;

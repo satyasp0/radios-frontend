@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link";
-import ParticleScene from "@/utils/ParticleSystemBackground";
 import React from "react";
 
 
@@ -11,12 +10,11 @@ export default function Home() {
       <title>Agus Setiawan Popalia</title>
     </header>
     <div className="radio-container">
-      <ParticleScene />
       <div className="content">
         <main className="h-screen justify-center items-center text-amber-100 font-semibold">
           <header>
             <h1 className="flex justify-start p-5 text-2xl h-1/6">
-              Hello
+
             </h1>
           </header>
           <ul className="m-auto items-center flex gap-52 justify-center h-5/6">
