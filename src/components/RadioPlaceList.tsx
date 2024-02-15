@@ -14,10 +14,7 @@ import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
 import {useEffect} from "react";
 import {getRealID} from "@/utils/getRealId";
 
-export default function RadioPlaceList({contents, scrollRef}: {
-    contents: RadioContentDto[] | undefined;
-    scrollRef:HTMLDivElement | null;
-    }) {
+export default function RadioPlaceList({contents, scrollRef}: Readonly<{ contents: ReadonlyArray<RadioContentDto> | undefined; scrollRef: HTMLDivElement | null; }>): JSX.Element {
     const dispatch = UseAppDispatch();
 
     const {
@@ -110,49 +107,49 @@ export default function RadioPlaceList({contents, scrollRef}: {
     const PlaceHeader = `${placeTitle}, ${placeSubtitle}`;
     return(<>
         {!isAllPlaceChannels && contents?.map((contents) => (<>
-                <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-gray-900 dark:text-white">
+                <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-slate-100 dark:text-white">
                      {isAllPlaceChannels?  PlaceHeader : contents.title}
                 </div>
 
-                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg cursor-pointer">
-                    {contents?.items?.map((items) => (<>
-                        <li className={`${items.title === radioName ? "text-blue-600 dark:bg-gray-600 bg-gray-100/50 dark:text-blue-400 hover:dark:text-blue-300 cursor-not-allowed"  : ""} flex rounded-2xl justify-between hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white items-center content-center`}
+                <ul className="py-2 text-sm text-slate-50/50 dark:text-gray-200 rounded-lg cursor-pointer">
+                    {contents?.items?.map((items) => (
+                        <li className={`${items.title === radioName ? "text-blue-600 bg-slate-100/20 dark:text-blue-400 cursor-not-allowed"  : ""} my-1 flex rounded-2xl justify-between hover:bg-slate-100/10 items-center content-center`}
                             key={items.title}
                             data-id={items.href}
                             onClick={() => handleLiClick((items?.href ?? items.page?.url) ?? "")}>
-                            <a className="block px-4 py-2">
+                            <button className="block text-left px-4 py-2" type="button">
                                 {items.title}
                                 {contents?.title?.toLowerCase().startsWith("popular") || contents?.title?.toLowerCase().startsWith("picks from") ?
                                     <p className={"text-gray-500 text-xs"}>{items?.subtitle}</p> : ""
                                 }
-                            </a>
+                            </button>
                             <RadioListAccessory contents={contents} items={items} />
                         </li>
-                    </>))}
+                    ))}
                 </ul>
             </>))
         }
 
         {isAllPlaceChannels && contents?.map((contents) => (<>
-            <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-gray-900 dark:text-white">
+            <div className="px-4 border-b-2 border-gray-700/50 dark:border-gray-200/50 pb-1 text-sm font-extrabold text-slate-100 dark:text-white">
                 {isAllPlaceChannels?  PlaceHeader : contents.title}
             </div>
 
-            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg cursor-pointer">
-                {contents?.items?.map((items) => (<>
-                    <li className={`${items.page?.title === radioName ? "text-blue-600 dark:bg-gray-600 bg-gray-100/50 dark:text-blue-400 hover:dark:text-blue-300 cursor-not-allowed"  : ""} flex rounded-2xl justify-between hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white items-center content-center`}
+            <ul className="py-2 text-sm text-slate-50/50 dark:text-gray-200 rounded-lg cursor-pointer">
+                {contents?.items?.map((items) => (
+                    <li className={`${items.page?.title === radioName ? "text-blue-600 dark:bg-gray-600 bg-slate-100/20 dark:text-blue-400 cursor-not-allowed"  : ""} my-1 flex rounded-2xl justify-between hover:bg-slate-100/10  items-center content-center`}
                         key={items.page?.title}
                         data-id={items.page?.url}
                         onClick={() => handleLiClick((items?.page?.url  ?? items.page?.url) ?? "")}>
-                        <a className="block px-4 py-2">
+                        <button className="block px-4 py-2" type="button">
                             {items.page?.title}
                             {contents?.title?.toLowerCase().startsWith("popular") || contents?.title?.toLowerCase().startsWith("picks from") ?
                                 <p className={"text-gray-500 text-xs"}>{items.page?.subtitle}</p> : ""
                             }
-                        </a>
+                        </button>
                         <RadioListAccessory contents={contents} items={items} />
                     </li>
-                </>))}
+                ))}
             </ul>
         </>))}
     </>)

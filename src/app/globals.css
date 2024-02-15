@@ -118,8 +118,8 @@ canvas {
 
 .floating-element {
   position: absolute;
-  top: 23px;
-  left: 20px;
+  top: 15px;
+  left: 36px;
 }
 
 .active-left {

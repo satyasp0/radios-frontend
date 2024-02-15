@@ -1,5 +1,4 @@
 "use client"
-import ParticleScene from "@/utils/ParticleSystemBackground";
 import React, { useEffect, useState } from "react";
 import Player from "./UseRadioPlayer";
 
@@ -21,8 +20,6 @@ export default function Radio() {
 
     return (
         <div className="radio-container">
-            <ParticleScene />
-            <audio src={"https://radio.garden/api/ara/content/listen/2ayT4sGf/channel.mp3"}></audio>
             <div className="content">
                 <main className="min-h-screen flex flex-col justify-between items-center text-amber-200 font-semibold">
                     <header style={headerStyle} className="h-1/6 w-full">
