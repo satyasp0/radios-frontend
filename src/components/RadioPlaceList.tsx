@@ -117,7 +117,7 @@ export default function RadioPlaceList({contents, scrollRef}: Readonly<{ content
                             key={items.title}
                             data-id={items.href}
                             onClick={() => handleLiClick((items?.href ?? items.page?.url) ?? "")}>
-                            <button className="block px-4 py-2" type="button">
+                            <button className="block text-left px-4 py-2" type="button">
                                 {items.title}
                                 {contents?.title?.toLowerCase().startsWith("popular") || contents?.title?.toLowerCase().startsWith("picks from") ?
                                     <p className={"text-gray-500 text-xs"}>{items?.subtitle}</p> : ""
