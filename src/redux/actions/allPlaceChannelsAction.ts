@@ -1,10 +1,11 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import {radioDefaultHost} from "../../../config";
 
 export const fetchPlaceChannels = createAsyncThunk(
     "placeChannels/fetchPlaceChannels",
     async (placeCode:string) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/getAllChannelInPlace?code=${placeCode}`);
+            const response = await fetch(radioDefaultHost+`/api/getAllChannelInPlace?code=${placeCode}`);
             const data = await response.json()
             console.log("Fetching Place Detail Successfully :", data);
             return data
