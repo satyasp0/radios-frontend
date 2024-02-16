@@ -58,8 +58,8 @@ const ParticleScene: React.FC = () => {
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        const backgroundColor = 0x1a1a1a;
+        renderer.setClearColor(backgroundColor);
         containerRef.current.appendChild(renderer.domElement);
 
 
@@ -68,7 +68,7 @@ const ParticleScene: React.FC = () => {
         // Create 100 meshes and scatter them randomly
         for (let i = 0; i < particlesCount; i++) {
 
-            if(i%80==0){
+            if(i%150==0){
                 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
                 directionalLight.position.x = Math.random()
                 directionalLight.position.y = Math.random()

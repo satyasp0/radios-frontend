@@ -1,1 +1,2 @@
 export const radioDefaultEndpoint = process.env.NEXT_PUBLIC_RADIO_DEFAULT_ENDPOINT
+export const radioDefaultHost = process.env.NEXT_PUBLIC_RADIO_DEFAULT_HOST

@@ -1,13 +1,11 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {radioDefaultEndpoint} from "../../../config";
+import {radioDefaultHost} from "../../../config";
 
 export const fetchNowPlaying = createAsyncThunk(
     "nowPlaying/fetchNowPlaying",
     async (channelCode: string) => {
         try {
-            const response = await fetch(
-                radioDefaultEndpoint+`/channelDetail/${channelCode}`
-            );
+            const response = await fetch(radioDefaultHost+`/api/getChannelDetail?code=${channelCode}`);
             const data = await response.json();
             console.log("Fetch successful:", data);
             return data;
