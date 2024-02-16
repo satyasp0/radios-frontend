@@ -68,7 +68,7 @@ const ParticleScene: React.FC = () => {
         // Create 100 meshes and scatter them randomly
         for (let i = 0; i < particlesCount; i++) {
 
-            if(i%80==0){
+            if(i%125==0){
                 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
                 directionalLight.position.x = Math.random()
                 directionalLight.position.y = Math.random()

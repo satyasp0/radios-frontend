@@ -6,7 +6,7 @@ export const fetchNowPlaying = createAsyncThunk(
     async (channelCode: string) => {
         try {
             const response = await fetch(
-                radioDefaultEndpoint+`/channelDetail/${channelCode}`
+                radioDefaultEndpoint+`/channel/${channelCode}`
             );
             const data = await response.json();
             console.log("Fetch successful:", data);

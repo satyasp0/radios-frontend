@@ -5,7 +5,7 @@ export const fetchPlaceDetail = createAsyncThunk(
     "placeDetail/fetchPlaceDetail",
     async (placeCode:string) =>{
         try {
-            const response = await fetch(radioDefaultEndpoint+`/place/${placeCode}`);
+            const response = await fetch(radioDefaultEndpoint+`/page/${placeCode}`);
 
             const data = await response.json()
             console.log("Fetching Place Detail Successfully :", data);
