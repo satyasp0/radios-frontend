@@ -23,13 +23,13 @@ export const allPlaceChannelsSlice = createSlice({
             })
             .addCase(fetchPlaceChannels.fulfilled, (state, action) => {
                 state.isLoading = false
-                    state.type = action.payload.data?.data?.type;
-                    state.map = action.payload.data?.data?.map;
-                    state.title = action.payload.data?.data?.title;
-                    state.subtitle = action.payload.data?.data?.subtitle;
-                    state.url = action.payload.data?.data?.url;
-                    state.count = action.payload.data?.data?.count;
-                    state.content = action.payload.data?.data?.content ?? [];
+                state.type = action.payload.data?.data?.type;
+                state.map = action.payload.data?.data?.map;
+                state.title = action.payload.data?.data?.title;
+                state.subtitle = action.payload.data?.data?.subtitle;
+                state.url = action.payload.data?.data?.url;
+                state.count = action.payload.data?.data?.count;
+                state.content = action.payload.data?.data?.content ?? [];
             })
             .addCase(fetchPlaceChannels.rejected, (state) => {
                 state.isLoading = false

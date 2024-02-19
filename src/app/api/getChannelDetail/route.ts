@@ -8,7 +8,6 @@ export async function GET(request: Request) {
             radioDefaultEndpoint+`/channel/${code}`
         );
         const data = await response.json();
-        console.log("Fetch successful:", data);
         return Response.json({ data })
     } catch (error) {
         console.error("Error in fetchNowPlaying:", error);

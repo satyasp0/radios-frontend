@@ -13,6 +13,7 @@ import {fetchPlaceChannels} from "@/redux/actions/allPlaceChannelsAction";
 import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
 import {useEffect} from "react";
 import {getRealID} from "@/utils/getRealId";
+import {getHost} from "@/utils/getHost";
 
 export default function RadioPlaceList({contents, scrollRef}: Readonly<{ contents: ReadonlyArray<RadioContentDto> | undefined; scrollRef: HTMLDivElement | null; }>): JSX.Element {
     const dispatch = UseAppDispatch();
@@ -38,19 +39,19 @@ export default function RadioPlaceList({contents, scrollRef}: Readonly<{ content
             return;
         }else if(id.startsWith("/listen")){
             dispatch(setRadioIsPlaying(false));
-            dispatch(fetchNowPlaying(getRealID(id,1)));
-            findNextAndPrevId()
+            dispatch(fetchNowPlaying({code: getRealID(id,1), hostName:getHost()}));
+            findNextAndPrevId();
         }else if (id.startsWith("/visit") && id.endsWith("channels")){
-            dispatch(fetchPlaceChannels(getRealID(id,2)))
-            dispatch(setIsAllPlaceChannels(true))
+            dispatch(fetchPlaceChannels({code: getRealID(id,2), hostName:getHost()}));
+            dispatch(setIsAllPlaceChannels(true));
             findNextAndPrevId()
         }else if (id.startsWith("/visit")){
-            dispatch(fetchPlaceDetail(getRealID(id,1)))
-            scrollToTop()
+            dispatch(fetchPlaceDetail({code:getRealID(id,1),hostName:getHost()}));
+            scrollToTop();
         }else {
             dispatch(setRadioIsPlaying(false));
-            dispatch(fetchNowPlaying(id));
-            dispatch(fetchPlaceDetail("1lHyt385"))
+            dispatch(fetchNowPlaying({code:id, hostName:getHost()}));
+            dispatch(fetchPlaceDetail({code:"1lHyt385", hostName:getHost()}));
         }
     };
 
