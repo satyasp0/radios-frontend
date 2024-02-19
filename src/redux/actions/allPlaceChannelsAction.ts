@@ -3,9 +3,10 @@ import {radioDefaultHost} from "../../../config";
 
 export const fetchPlaceChannels = createAsyncThunk(
     "placeChannels/fetchPlaceChannels",
-    async (placeCode:string) => {
+    async (param:BasePayloadCreatorDto) => {
         try {
-            const response = await fetch(radioDefaultHost+`/api/getAllChannelInPlace?code=${placeCode}`);
+            const host = param.hostName ?? radioDefaultHost;
+            const response = await fetch(host+`/api/getAllChannelInPlace?code=${param.code}`);
             const data = await response.json()
             console.log("Fetching Place Detail Successfully :", data);
             return data

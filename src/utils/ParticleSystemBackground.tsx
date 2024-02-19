@@ -58,8 +58,6 @@ const ParticleScene: React.FC = () => {
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        const backgroundColor = 0x1a1a1a;
-        renderer.setClearColor(backgroundColor);
         containerRef.current.appendChild(renderer.domElement);
 
 

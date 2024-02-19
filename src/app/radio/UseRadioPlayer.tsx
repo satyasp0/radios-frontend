@@ -8,6 +8,9 @@ import RadioList from "@/components/RadioList";
 import {fetchNowPlaying} from "@/redux/actions/nowPlayingActions";
 import {getRealID} from "@/utils/getRealId";
 import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
+import {getRGBValues} from "@/utils/rgbToHex";
+import ColorPickerComponent from "@/components/ColorPicker";
+import {getHost} from "@/utils/getHost";
 
 export default function useRadioPlayer(){
 
@@ -29,6 +32,7 @@ export default function useRadioPlayer(){
 
     const {
         isPlaying:radioIsPlaying,
+        secondaryColor,
     } = UseAppSelector((state) => state.states)
 
     const radioLocation = `${radioRegion}, ${countryTitle}`;
@@ -47,13 +51,13 @@ export default function useRadioPlayer(){
 
     const handleNexClick = (id:string) =>{
         dispatch(setRadioIsPlaying(false));
-        dispatch(fetchNowPlaying(getRealID(id,1)));
+        dispatch(fetchNowPlaying({code:getRealID(id,1),hostName:getHost()}));
         dispatch(setNowPlayingId(id));
     }
 
     useEffect(() => {
-        dispatch(fetchNowPlaying("_PBsjNLL"));
-        dispatch(fetchPlaceDetail("1lHyt385"))
+        dispatch(fetchNowPlaying({code:"_PBsjNLL",hostName:getHost()}));
+        dispatch(fetchPlaceDetail({code:"1lHyt385",hostName:getHost()}))
         dispatch(setRadioIsLoading(false))
         dispatch(setRadioIsPlaying(false))
     }, [dispatch]);
@@ -67,9 +71,17 @@ export default function useRadioPlayer(){
                     src={`https://radio.garden/api/ara/content/listen/${radioID}/channel.mp3`}
                     onCanPlay={() => {
                         if (!radioIsPlaying) {
-                            audioRef.current?.play();
-                            dispatch(setRadioIsLoading(false))
-                            dispatch(setRadioIsPlaying(true))
+                            const playPromise = audioRef.current?.play();
+                            if (playPromise !== undefined) {
+                                playPromise
+                                    .then(() => {
+                                        dispatch(setRadioIsLoading(false));
+                                        dispatch(setRadioIsPlaying(true));
+                                    })
+                                    .catch(error => {
+                                        console.error('Error playing audio:', error);
+                                    });
+                            }
                         }
                     }}
                     muted={!radioIsPlaying}
@@ -78,7 +90,9 @@ export default function useRadioPlayer(){
                 <RadioList/>
 
                 <div
-                    className="backdrop-blur-sm bg-slate-100/20 transition-all duration-500 dark:bg-slate-800/70 rounded-t-xl p-4 pb-6 sm:p-10 sm:pb-8 lg:p-6 xl:p-10 xl:pb-8 space-y-6 sm:space-y-8 lg:space-y-6 xl:space-y-8">
+                    style={{ backgroundColor: getRGBValues(secondaryColor) }}
+                    className="backdrop-blur-sm transition-all duration-500 dark:bg-slate-800/70 rounded-t-xl p-4 sm:p-10 sm:pb-8 lg:p-6 xl:p-10 xl:py-4">
+                    <ColorPickerComponent/>
                     <div className="flex justify-center items-center space-x-4">
                         <div className="min-w-0 space-y-1 font-semibold text-center">
                             <h2 className="text-slate-500 dark:text-slate-400 text-sm leading-6 truncate">
@@ -91,7 +105,8 @@ export default function useRadioPlayer(){
                     </div>
                 </div>
                 <div
-                    className="backdrop-blur-sm bg-slate-100/20 text-slate-500 transition-all duration-500 dark:bg-slate-600/70 dark:text-slate-200/50 rounded-b-xl flex items-center">
+                    style={{ backgroundColor: getRGBValues(secondaryColor) }}
+                    className="backdrop-blur-sm text-slate-500 transition-all duration-500 dark:bg-slate-600/70 dark:text-slate-200/50 rounded-b-xl flex items-center">
                     <div onClick={() => previousPlayingId && handleNexClick(previousPlayingId)} className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
                         <button type="button" aria-label="Previous">
                           <PrevIcon/>

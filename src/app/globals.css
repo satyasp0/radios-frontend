@@ -131,4 +131,18 @@ canvas {
 .active-right {
   filter: blur(0px);
 }
+input[type="color"]::-webkit-color-swatch{
+  border-radius: 50%;
+  border:none;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 1px;
+}
 
+.color-picker {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.color-picker.active {
+  opacity: 1;
+}

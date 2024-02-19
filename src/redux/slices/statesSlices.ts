@@ -8,6 +8,8 @@ type statesState = {
     nowPlayingId?:string;
     nextPlayingId?:string;
     previousPlayingId?:string;
+    primaryColor?:RGBAColor;
+    secondaryColor?:RGBAColor;
 }
 
 const initialState:statesState = {
@@ -17,7 +19,9 @@ const initialState:statesState = {
     isAllPlaceChannels:false,
     nowPlayingId:"",
     nextPlayingId:"",
-    previousPlayingId:""
+    previousPlayingId:"",
+    primaryColor:{ r: 29, g: 78, b: 216, a: 0.2 },
+    secondaryColor:{ r: 241, g: 245, b: 249, a: 0.2 },
 } as statesState
 
 export const states = createSlice({
@@ -44,6 +48,12 @@ export const states = createSlice({
         },
         setPreviousPlayingId:(state, action) => {
             state.previousPlayingId = action.payload;
+        },
+        setPrimaryColor:(state, action)=>{
+            state.primaryColor = action.payload;
+        },
+        setSecondaryColor:(state,action)=>{
+            state.secondaryColor = action.payload;
         }
     }
 });
@@ -56,6 +66,8 @@ export const {
     setNowPlayingId,
     setPreviousPlayingId,
     setNextPlayingId,
+    setPrimaryColor,
+    setSecondaryColor
 } = states.actions;
 
 export default states.reducer

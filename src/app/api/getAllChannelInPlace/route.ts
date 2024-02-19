@@ -5,7 +5,6 @@ export async function GET(request: Request) {
     try {
         const response = await fetch(radioDefaultEndpoint+`/page/${code}/channels`);
         const data = await response.json()
-        console.log("Fetching Place Detail Successfully :", data);
         return Response.json({ data })
     } catch (error) {
         console.error("Error in fetchNowPlaying:", error);

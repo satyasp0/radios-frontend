@@ -3,9 +3,10 @@ import {radioDefaultHost} from "../../../config";
 
 export const fetchNowPlaying = createAsyncThunk(
     "nowPlaying/fetchNowPlaying",
-    async (channelCode: string) => {
+    async (param:BasePayloadCreatorDto) => {
         try {
-            const response = await fetch(radioDefaultHost+`/api/getChannelDetail?code=${channelCode}`);
+            const host = param.hostName ?? radioDefaultHost;
+            const response = await fetch(host+`/api/getChannelDetail?code=${param.code}`);
             const data = await response.json();
             console.log("Fetch successful:", data);
             return data;
