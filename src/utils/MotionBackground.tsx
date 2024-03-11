@@ -1,7 +1,13 @@
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const MotionBackground: React.FC = () => {
+    const [key, setKey] = useState<string>('');
+
+    useEffect(() => {
+        setKey(generateRandomKey(10));
+    }, []);
+
     const getRandomNumber = (min: number, max: number) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
@@ -38,7 +44,7 @@ const MotionBackground: React.FC = () => {
             <div style={{ filter: 'blur(80px)', width: '100%', height: '100%' }}>
                 {[...Array(5)].map((_, index) => (
                     <motion.div
-                        key={generateRandomKey(10)}
+                        key={`${key}-${generateRandomKey(10)}`} // Ensure each circle has a unique key
                         style={{
                             width: `${getRandomNumber(400, 900)}px`,
                             height: `${getRandomNumber(500, 900)}px`,
