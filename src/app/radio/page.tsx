@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Player from "./UseRadioPlayer";
 
 export default function Radio() {
@@ -28,11 +28,9 @@ export default function Radio() {
                         </h1>
                     </header>
 
-
                     <div className="h-1/6">
-                        {/* Player Component */}
                         <div className="md:fixed sm:w-full md:w-2/5 lg:w-1/5 p-2 bottom-3 md:left-0">
-                            <Player />
+                            <Player/>
                         </div>
                     </div>
                 </main>

@@ -3,146 +3,160 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+    --secondary-glow: conic-gradient(
+            from 10deg at 50% 50%,
+            #eb7494 0deg,
+            #ae77b2 55deg,
+            #97b5da 120deg,
+            #0099ca 160deg,
+            transparent 360deg
+    );
+
+    --third-glow: conic-gradient(
+            from 90deg at 50% 50%,
+            #ff8b7e 0deg,
+            #e24e6b 160deg,
+            #7ed2da 120deg,
+            #8bdce0 55deg,
+            transparent 360deg
+    );
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+            to bottom,
+            transparent,
+            rgb(var(--background-end-rgb))
+    ) rgb(var(--background-start-rgb));
 }
 
-/* Radio.css */
-.radio-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-}
 
 canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1; /* Place the canvas behind other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Place the canvas behind other content */
 }
 
 .content {
-  position: relative;
-  z-index: 1; /* Place the content above the canvas */
-  /* Add your content styling here */
+    position: relative;
+    z-index: 1; /* Place the content above the canvas */
+    /* Add your content styling here */
 }
 
 /* Custom CSS animation for float and wiggle */
 @keyframes floatAndWiggle {
-  0%, 100% {
-    transform: scale(1.15) rotate(0deg);
-  }
-  25% {
-    transform: scale(1.15) rotate(-2deg);
-  }
-  50% {
-    transform: scale(1.15) rotate(0deg);
-  }
-  75% {
-    transform: scale(1.15) rotate(2deg);
-  }
+    0%, 100% {
+        transform: scale(1.15) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.15) rotate(-2deg);
+    }
+    50% {
+        transform: scale(1.15) rotate(0deg);
+    }
+    75% {
+        transform: scale(1.15) rotate(2deg);
+    }
 }
 
 /* Apply the animation class */
 .hover\:animate-float-and-wiggle:hover {
-  animation: floatAndWiggle 0.5s ease infinite; /* Adjust duration and timing as needed */
+    animation: floatAndWiggle 0.5s ease infinite; /* Adjust duration and timing as needed */
 }
 
 /* YourComponent.css */
 .element {
-  max-height: 1px;
-  overflow: hidden;
-  transition: max-height 0.4s ease-in-out; /* Adjust the duration and timing function as needed */
+    max-height: 1px;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out; /* Adjust the duration and timing function as needed */
 }
 
 .element.visible {
-  overflow-y: scroll;
-  max-height: 80vw;
+    overflow-y: scroll;
+    max-height: 80vw;
 }
 
 @media (min-height: 800px) {
-  .element.visible {
-    max-height: 110vw; /* Adjust to your desired value for larger screens */
-  }
+    .element.visible {
+        max-height: 110vw; /* Adjust to your desired value for larger screens */
+    }
 }
 
 @media (min-width: 768px) {
-  .element.visible {
-    max-height: 55vw; /* Adjust to your desired value for larger screens */
-  }
+    .element.visible {
+        max-height: 55vw; /* Adjust to your desired value for larger screens */
+    }
 }
 
 /* Media query for screens larger than or equal to 1024px */
 @media (min-width: 1024px) {
-  .element.visible {
-    max-height: 31vw; /* Adjust to your desired value for even larger screens */
-  }
+    .element.visible {
+        max-height: 31vw; /* Adjust to your desired value for even larger screens */
+    }
 }
 
 .element.visible::-webkit-scrollbar {
-  width: 0.5rem; /* Adjust the width as needed */
-  display: none; /* Hide scrollbar */
+    width: 0.5rem; /* Adjust the width as needed */
+    display: none; /* Hide scrollbar */
 }
 
 .spin-it {
-  animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .floating-element {
-  position: absolute;
-  top: 15px;
-  left: 36px;
+    position: absolute;
+    top: 15px;
+    left: 36px;
 }
 
 .active-left {
-  filter: blur(0px);
+    filter: blur(0px);
 }
+
 .active-middle {
-  filter: blur(1px);
+    filter: blur(1px);
 }
+
 .active-right {
-  filter: blur(0px);
+    filter: blur(0px);
 }
-input[type="color"]::-webkit-color-swatch{
-  border-radius: 50%;
-  border:none;
+
+input[type="color"]::-webkit-color-swatch {
+    border-radius: 50%;
+    border: none;
 }
+
 input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 1px;
+    padding: 1px;
 }
 
 .color-picker {
-  transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .color-picker.active {
-  opacity: 1;
+    opacity: 1;
 }
