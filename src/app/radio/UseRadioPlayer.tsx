@@ -12,7 +12,7 @@ import {getRGBValues} from "@/utils/rgbToHex";
 import ColorPickerComponent from "@/components/ColorPicker";
 import {getHost} from "@/utils/getHost";
 
-export default function useRadioPlayer(){
+export default function useRadioPlayer() {
 
     const dispatch = UseAppDispatch();
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -22,42 +22,42 @@ export default function useRadioPlayer(){
     } = UseAppSelector((state) => state.states)
 
     const {
-        place: { title: radioRegion },
-        country: { title: countryTitle },
+        place: {title: radioRegion},
+        country: {title: countryTitle},
         title: radioName,
         id: radioID,
-        isLoading:radioIsLoading,
+        isLoading: radioIsLoading,
         isGetComplete,
     } = UseAppSelector((state) => state.nowPlaying);
 
     const {
-        isPlaying:radioIsPlaying,
+        isPlaying: radioIsPlaying,
         secondaryColor,
     } = UseAppSelector((state) => state.states)
 
     const radioLocation = `${radioRegion}, ${countryTitle}`;
 
 
-    const handlePlayerClick = () =>{
+    const handlePlayerClick = () => {
         dispatch(setRadioIsPlaying(!radioIsPlaying))
     }
 
     let iconToDisplay;
     if (radioIsLoading) {
-        iconToDisplay = <LoadingIcon />;
+        iconToDisplay = <LoadingIcon/>;
     } else {
-        iconToDisplay = radioIsPlaying ? <StopIcon /> : <PlayIcon />;
+        iconToDisplay = radioIsPlaying ? <StopIcon/> : <PlayIcon/>;
     }
 
-    const handleNexClick = (id:string) =>{
+    const handleNexClick = (id: string) => {
         dispatch(setRadioIsPlaying(false));
-        dispatch(fetchNowPlaying({code:getRealID(id,1),hostName:getHost()}));
+        dispatch(fetchNowPlaying({code: getRealID(id, 1), hostName: getHost()}));
         dispatch(setNowPlayingId(id));
     }
 
     useEffect(() => {
-        dispatch(fetchNowPlaying({code:"_PBsjNLL",hostName:getHost()}));
-        dispatch(fetchPlaceDetail({code:"1lHyt385",hostName:getHost()}))
+        dispatch(fetchNowPlaying({code: "_PBsjNLL", hostName: getHost()}));
+        dispatch(fetchPlaceDetail({code: "1lHyt385", hostName: getHost()}))
         dispatch(setRadioIsLoading(false))
         dispatch(setRadioIsPlaying(false))
     }, [dispatch]);
@@ -90,7 +90,7 @@ export default function useRadioPlayer(){
                 <RadioList/>
 
                 <div
-                    style={{ backgroundColor: getRGBValues(secondaryColor) }}
+                    style={{backgroundColor: getRGBValues(secondaryColor)}}
                     className="backdrop-blur-sm transition-all duration-500 dark:bg-slate-800/70 rounded-t-xl p-4 sm:p-10 sm:pb-8 lg:p-6 xl:p-10 xl:py-4">
                     <ColorPickerComponent/>
                     <div className="flex justify-center items-center space-x-4">
@@ -105,17 +105,18 @@ export default function useRadioPlayer(){
                     </div>
                 </div>
                 <div
-                    style={{ backgroundColor: getRGBValues(secondaryColor) }}
+                    style={{backgroundColor: getRGBValues(secondaryColor)}}
                     className="backdrop-blur-sm text-slate-500 transition-all duration-500 dark:bg-slate-600/70 dark:text-slate-200/50 rounded-b-xl flex items-center">
-                    <div onClick={() => previousPlayingId && handleNexClick(previousPlayingId)} className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
+                    <div onClick={() => previousPlayingId && handleNexClick(previousPlayingId)}
+                         className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
                         <button type="button" aria-label="Previous">
-                          <PrevIcon/>
+                            <PrevIcon/>
                         </button>
                     </div>
                     <button
                         onClick={handlePlayerClick}
                         type="button"
-                        className={`bg-white/10 ${ radioIsPlaying ? 'transform-none' : 'transform rotate-90'} 
+                        className={`bg-white/10 ${radioIsPlaying ? 'transform-none' : 'transform rotate-90'} 
                         transition-transform duration-300 dark:bg-slate-100/80 dark:text-slate-700 flex-none
                         mb-2 mx-auto w-20 h-20 rounded-full ring-1 ring-slate-900/5 shadow-md flex items-center justify-center
                         p-7 md:px-6`}
@@ -125,7 +126,8 @@ export default function useRadioPlayer(){
 
                     </button>
 
-                    <div onClick={() => nextPlayingId && handleNexClick(nextPlayingId)} className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
+                    <div onClick={() => nextPlayingId && handleNexClick(nextPlayingId)}
+                         className="flex-auto hover:animate-float-and-wiggle flex items-center justify-evenly">
                         <button type="button" aria-label="Next">
                             <NextIcon/>
                         </button>
