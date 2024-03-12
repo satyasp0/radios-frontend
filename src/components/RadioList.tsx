@@ -1,17 +1,17 @@
 import {UseAppDispatch, UseAppSelector} from "@/redux/hooks";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {setIsAllPlaceChannels, setIsHidden} from "@/redux/slices/statesSlices";
 import RadioPlaceList from "@/components/RadioPlaceList";
 import {GoIcon} from "@/sources/icons";
 import {getRGBValues} from "@/utils/rgbToHex";
 
-export default function RadioList(){
+export default function RadioList({audioRef}: Readonly<{ audioRef: React.RefObject<HTMLAudioElement> | null }>): React.JSX.Element {
     const dispatch = UseAppDispatch();
     const [transitionStage, setTransitionStage] = useState<"active-left" | "active-middle" | "active-right">("active-left");
     const scrollerRef = useRef<HTMLDivElement>(null);
 
     const {
-        isHidden:hider,
+        isHidden: hider,
         isAllPlaceChannels,
         primaryColor,
         secondaryColor
@@ -19,11 +19,11 @@ export default function RadioList(){
 
 
     const {
-        content:PlaceChannelsContent,
+        content: PlaceChannelsContent,
     } = UseAppSelector((state) => state.allPlaceChannelsSlice)
 
     const {
-        content:placeDetailContent,
+        content: placeDetailContent,
         title,
         subtitle
     } = UseAppSelector((state) => state.placeDetail)
@@ -52,59 +52,61 @@ export default function RadioList(){
                 setTransitionStage("active-left");
             }, 200);
         }
-    }, [isAllPlaceChannels]);
+    }, [isAllPlaceChannels, transitionStage]);
 
-    return(
+    return (
         <>
-            <div style={{ backgroundColor: getRGBValues(primaryColor) }} className="w-full p-4 px-9 backdrop-blur-sm text-center rounded-t-xl text-sm font-semibold text-white dark:text-white">
+            <div style={{backgroundColor: getRGBValues(primaryColor)}}
+                 className="w-full p-4 px-9 backdrop-blur-sm text-center rounded-t-xl text-sm font-semibold text-white dark:text-white">
                 {isAllPlaceChannels && (
-                    <button className="rotate-180 floating-element hover:bg-slate-400 bg-slate-50/50 rounded-lg" onClick={() => dispatch(setIsAllPlaceChannels(false))}>
+                    <button className="rotate-180 floating-element hover:bg-slate-400 bg-slate-50/50 rounded-lg"
+                            onClick={() => dispatch(setIsAllPlaceChannels(false))}>
                         <GoIcon iconColor="#000000"/>
                     </button>
                 )}
                 {title}, {subtitle}
             </div>
             <div
-                style={{ backgroundColor: getRGBValues(secondaryColor) }}
+                style={{backgroundColor: getRGBValues(secondaryColor)}}
                 className={`element ${hider ? '' : 'visible rounded-b-xl'} 
                            backdrop-blur-sm border-slate-100/50 dark:bg-slate-800/70 dark:border-slate-500/50
                            border-b  w-full p-4 pb-8 sm:p-6 sm:pb-8 lg:px-4 xl:px-6 lg:pt-5 xl:pb-10`}
-                 ref={scrollerRef}>
+                ref={scrollerRef}>
 
                 <div className={`${transitionStage}`}>
                     {isAllPlaceChannels ? (
                         <RadioPlaceList
                             contents={PlaceChannelsContent}
                             scrollRef={scrollerRef.current}
-                        />
+                            audioRef={audioRef}/>
                     ) : (
                         <RadioPlaceList
                             contents={placeDetailContent}
                             scrollRef={scrollerRef.current}
-                        />
+                            audioRef={audioRef}/>
                     )}
                 </div>
             </div>
             <button
                 onClick={handleHider}
-                style={{ backgroundColor: getRGBValues(primaryColor) }}
+                style={{backgroundColor: getRGBValues(primaryColor)}}
                 className={`backdrop-blur-sm mb-4 w-full text-white hover:bg-blue-700/20 font-medium 
-                          ${hider ? "rounded-b-lg" : "rounded-lg" } mt-1 text-sm px-10 py-2.5 text-center inline-flex justify-between items-center dark:bg-blue-600/70 dark:hover:bg-blue-700/70`}
+                          ${hider ? "rounded-b-lg" : "rounded-lg"} mt-1 text-sm px-10 py-2.5 text-center inline-flex justify-between items-center dark:bg-blue-600/70 dark:hover:bg-blue-700/70`}
                 type="button"
             >
                 Radio List
                 <svg
-                className={`w-2.5 h-2.5 ml-2.5 transition-transform ${hider ? "rotate-0" : "rotate-180"}`}
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6">
+                    className={`w-2.5 h-2.5 ml-2.5 transition-transform ${hider ? "rotate-0" : "rotate-180"}`}
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6">
                     <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 4 4 4-4"
                     />
                 </svg>
             </button>

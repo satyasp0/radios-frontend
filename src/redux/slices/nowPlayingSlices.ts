@@ -53,6 +53,7 @@ export const nowPlayingSlice = createSlice({
                 state.country.id = action.payload.data?.data?.country?.id
                 state.country.title = action.payload.data?.data?.country?.title
                 state.isGetComplete = true;
+                state.isLoading = false;
             })
             .addCase(fetchNowPlaying.rejected, (state) => {
                 state.isLoading = false;
