@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useRef} from 'react';
 import * as THREE from 'three';
+import {motion} from "framer-motion";
 
 const ParticleScene: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -54,9 +55,9 @@ const ParticleScene: React.FC = () => {
         camera.position.z = 5;
 
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2( 0x000000, 0.1 );
+        scene.fog = new THREE.FogExp2(0x000000, 0.1);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
         containerRef.current.appendChild(renderer.domElement);
 
@@ -66,7 +67,7 @@ const ParticleScene: React.FC = () => {
         // Create 100 meshes and scatter them randomly
         for (let i = 0; i < particlesCount; i++) {
 
-            if(i%150==0){
+            if (i % 150 == 0) {
                 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
                 directionalLight.position.x = Math.random()
                 directionalLight.position.y = Math.random()
@@ -74,7 +75,7 @@ const ParticleScene: React.FC = () => {
                 scene.add(directionalLight);
             }
 
-            const material = new THREE.MeshStandardMaterial({ color: getRandomPlanetColor(), roughness:10});
+            const material = new THREE.MeshStandardMaterial({color: getRandomPlanetColor(), roughness: 10});
             material.roughness = 0.4
 
             const geometry = new THREE.CapsuleGeometry(0.005 + Math.random() * 0.0000001, 0.0005, 5, 15);
@@ -137,7 +138,17 @@ const ParticleScene: React.FC = () => {
         };
     }, []);
 
-    return <div ref={containerRef} />;
+    return (
+        <motion.div
+            initial={{opacity: 0.5}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            transition={{
+                duration: 1
+            }}>
+            <div ref={containerRef}/>
+        </motion.div>
+    )
 };
 
 export default ParticleScene;
