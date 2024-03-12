@@ -16,14 +16,6 @@ export default function Home() {
     const clickMotion = {
         mainHover: {
             translateY: [0, -5],
-            transition: {
-                duration: 0.4,
-                type: "spring",
-                bounce: 0.4,
-                repeat: Infinity,
-                repeatType: "reverse",
-            },
-
         }
     };
 
@@ -55,7 +47,13 @@ export default function Home() {
                             <p>
                                 Get To Know Me!
                             </p>
-                            <motion.div variants={clickMotion}>
+                            <motion.div variants={clickMotion} transition={{
+                                duration: 0.4,
+                                type: "spring",
+                                bounce: 0.4,
+                                repeat: Infinity,
+                                repeatType: "reverse",
+                            }}>
                                 <Link className={"bg-blue-300 rounded-full flex items-center px-1 lg:px-5"}
                                       href={"/about"}>
                                     Click
