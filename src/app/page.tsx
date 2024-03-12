@@ -2,20 +2,27 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import {AnimatePresence, motion} from "framer-motion";
+import {AnimatePresence, motion, Variants} from "framer-motion";
 import MotionBackground from "@/utils/MotionBackground";
 
 
 export default function Home() {
-    const radioMotion = {
+    const radioMotion: Variants = {
         hover: {
             scale: 1.1,
         }
     };
 
-    const clickMotion = {
+    const clickMotion: Variants = {
         mainHover: {
             translateY: [0, -5],
+            transition: {
+                duration: 0.4,
+                type: "spring",
+                bounce: 0.4,
+                repeat: Infinity,
+                repeatType: "reverse",
+            }
         }
     };
 
@@ -47,13 +54,7 @@ export default function Home() {
                             <p>
                                 Get To Know Me!
                             </p>
-                            <motion.div variants={clickMotion} transition={{
-                                duration: 0.4,
-                                type: "spring",
-                                bounce: 0.4,
-                                repeat: Infinity,
-                                repeatType: "reverse",
-                            }}>
+                            <motion.div variants={clickMotion}>
                                 <Link className={"bg-blue-300 rounded-full flex items-center px-1 lg:px-5"}
                                       href={"/about"}>
                                     Click
