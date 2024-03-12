@@ -3,26 +3,9 @@
 @tailwind utilities;
 
 :root {
-    --foreground-rgb: 0, 0, 0;
+    --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
-    --secondary-glow: conic-gradient(
-            from 10deg at 50% 50%,
-            #eb7494 0deg,
-            #ae77b2 55deg,
-            #97b5da 120deg,
-            #0099ca 160deg,
-            transparent 360deg
-    );
-
-    --third-glow: conic-gradient(
-            from 90deg at 50% 50%,
-            #ff8b7e 0deg,
-            #e24e6b 160deg,
-            #7ed2da 120deg,
-            #8bdce0 55deg,
-            transparent 360deg
-    );
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +18,7 @@
 
 body {
     color: rgb(var(--foreground-rgb));
+    max-height: 100vw;
     background: linear-gradient(
             to bottom,
             transparent,
@@ -47,13 +31,12 @@ canvas {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: -1; /* Place the canvas behind other content */
+    z-index: -1;
 }
 
 .content {
     position: relative;
-    z-index: 1; /* Place the content above the canvas */
-    /* Add your content styling here */
+    z-index: 1
 }
 
 /* Custom CSS animation for float and wiggle */
