@@ -11,6 +11,7 @@ import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
 import {getRGBValues} from "@/utils/rgbToHex";
 import ColorPickerComponent from "@/components/ColorPicker";
 import {getHost} from "@/utils/getHost";
+import {setPlayer} from "@/utils/setPlayer";
 
 export default function useRadioPlayer() {
 
@@ -40,6 +41,7 @@ export default function useRadioPlayer() {
 
     const handlePlayerClick = () => {
         dispatch(setRadioIsPlaying(!radioIsPlaying))
+        setPlayer(radioIsPlaying,audioRef, dispatch);
     }
 
     let iconToDisplay;
@@ -69,25 +71,10 @@ export default function useRadioPlayer() {
                 <audio
                     ref={audioRef}
                     src={`https://radio.garden/api/ara/content/listen/${radioID}/channel.mp3`}
-                    onCanPlay={() => {
-                        if (!radioIsPlaying) {
-                            const playPromise = audioRef.current?.play();
-                            if (playPromise !== undefined) {
-                                playPromise
-                                    .then(() => {
-                                        dispatch(setRadioIsLoading(false));
-                                        dispatch(setRadioIsPlaying(true));
-                                    })
-                                    .catch(error => {
-                                        console.error('Error playing audio:', error);
-                                    });
-                            }
-                        }
-                    }}
                     muted={!radioIsPlaying}
                 />
 
-                <RadioList/>
+                <RadioList audioRef={audioRef}/>
 
                 <div
                     style={{backgroundColor: getRGBValues(secondaryColor)}}
@@ -116,7 +103,7 @@ export default function useRadioPlayer() {
                     <button
                         onClick={handlePlayerClick}
                         type="button"
-                        className={`bg-white/10 ${radioIsPlaying ? 'transform-none' : 'transform rotate-90'} 
+                        className={`bg-white/10 ${radioIsPlaying ? 'transform rotate-180' : 'transform-none'} 
                         transition-transform duration-300 dark:bg-slate-100/80 dark:text-slate-700 flex-none
                         mb-2 mx-auto w-20 h-20 rounded-full ring-1 ring-slate-900/5 shadow-md flex items-center justify-center
                         p-7 md:px-6`}

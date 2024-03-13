@@ -11,11 +11,11 @@ import {
 import {fetchNowPlaying} from "@/redux/actions/nowPlayingActions";
 import {fetchPlaceChannels} from "@/redux/actions/allPlaceChannelsAction";
 import {fetchPlaceDetail} from "@/redux/actions/placeDetailActions";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {getRealID} from "@/utils/getRealId";
 import {getHost} from "@/utils/getHost";
 
-export default function RadioPlaceList({contents, scrollRef}: Readonly<{ contents: ReadonlyArray<RadioContentDto> | undefined; scrollRef: HTMLDivElement | null; }>): JSX.Element {
+export default function RadioPlaceList({contents, scrollRef, audioRef}: Readonly<{ contents: ReadonlyArray<RadioContentDto> | undefined; scrollRef: HTMLDivElement | null; audioRef:React.RefObject<HTMLAudioElement>|null}>): React.JSX.Element {
     const dispatch = UseAppDispatch();
 
     const {
