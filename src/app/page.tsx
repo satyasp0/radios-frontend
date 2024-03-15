@@ -2,14 +2,18 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import {AnimatePresence, motion, Variants} from "framer-motion";
+import {AnimatePresence, easeInOut, motion, Variants} from "framer-motion";
 import MotionBackground from "@/utils/MotionBackground";
 
 
 export default function Home() {
     const radioMotion: Variants = {
         hover: {
-            scale: 1.1,
+            scale: 1.3,
+            transition: {
+                duration: 0.4,
+                type: easeInOut
+            }
         }
     };
 
@@ -26,6 +30,12 @@ export default function Home() {
         }
     };
 
+    const iconVariants: Variants = {
+        iconVariant:{
+            translateY: -8
+        }
+    }
+
     return (
         <AnimatePresence mode={"wait"}>
             <header>
@@ -41,12 +51,12 @@ export default function Home() {
                     transition={{
                         duration: 1
                     }}
-                    className="m-auto items-center flex-col flex gap-6 justify-center h-full">
+                    className="m-auto w-9/12 md:w-1/2 lg:w-1/4 transition-all duration-300 items-center flex-col flex gap-6 justify-center h-full">
                     <motion.div whileHover="mainHover"
                                 className={"w-full shadow rounded-xl bg-blue-200/10 border-2 border-fuchsia-200/10 flex-col p-10 flex justify-center "}>
                         <p className={"mb-10"}>Agus Setiawan Popalia</p>
-                        <div className={"m-auto w-9/12"}>
-                            <Image className={"rounded-full align-middle"} src="/potrait.jpg" width={300}
+                        <div className={"m-auto flex justify-center w-9/12"}>
+                            <Image className={"rounded-full"} src="/potrait.jpg" width={300}
                                    height={300}
                                    alt={"its me (at least if supposed to be my portrait)"}/>
                         </div>
@@ -54,9 +64,8 @@ export default function Home() {
                             <p>
                                 Get To Know Me!
                             </p>
-                            <motion.div variants={clickMotion}>
-                                <Link className={"bg-blue-300 rounded-full flex items-center px-1 lg:px-5"}
-                                      href={"/about"}>
+                            <motion.div className={"w-1/4 flex justify-center bg-blue-300 rounded-full"} variants={clickMotion}>
+                                <Link href={"/about"}>
                                     Click
                                 </Link>
                             </motion.div>
@@ -76,22 +85,22 @@ export default function Home() {
                     </motion.div>
                     <motion.div
                         className={"w-full invert shadow  rounded-full p-3 border-2 border-fuchsia-200/10 bg-blue-200/10 flex justify-around"}>
-                        <motion.div whileHover={{translateY: -5}}>
+                        <motion.div whileHover="iconVariant" variants={iconVariants}>
                             <Link href={"https://www.facebook.com/agussetiawan.popalia/"}>
                                 <Image src={"/icons/facebook.png"} alt={"Facebook Account"} width={25} height={25}/>
                             </Link>
                         </motion.div>
-                        <motion.div whileHover={{translateY: -5}}>
+                        <motion.div whileHover="iconVariant" variants={iconVariants}>
                             <Link href={"https://www.instagram.com/_sat.y/"}>
                                 <Image src={"/icons/instagram.png"} alt={"Instagram Account"} width={25} height={25}/>
                             </Link>
                         </motion.div>
-                        <motion.div whileHover={{translateY: -5}}>
+                        <motion.div whileHover="iconVariant" variants={iconVariants}>
                             <Link href={"https://www.linkedin.com/in/agus-setiawan-popalia/"}>
                                 <Image src={"/icons/linkedin.png"} alt={"LinkedIn Account"} width={25} height={25}/>
                             </Link>
                         </motion.div>
-                        <motion.div whileHover={{translateY: -5}}>
+                        <motion.div whileHover="iconVariant" variants={iconVariants}>
                             <Link
                                 href={"https://wa.me/6281243896336?text=Hey%20Satya!%20I%20Just%20wanted%20to%20drop%20you%20a%20quick%20message%20to%20ask%20about%20a%20few%20things.%20Mind%20if%20we%20chat%3F\n"}>
                                 <Image src={"/icons/whatsapp.png"} alt={"Whatsapp Account"} width={25} height={25}/>
