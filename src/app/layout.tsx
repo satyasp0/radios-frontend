@@ -15,7 +15,7 @@ export default function RootLayout({children}: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className={""}>
+        <html lang="en" className={"text-xs md:text-sm lg:text-base"}>
             <body className={inter.className}>
                     <Providers>
                         {children}
